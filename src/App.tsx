@@ -1,40 +1,49 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import axios from "axios";
+import { useState } from "react";
+
+const BASE_URL = "https://open-ufrgs-api.vercel.app";
 
 function App() {
-  return (
-    <div>
-      <HashRouter>
-        <Navbar bg="light" expand="lg">
-          <Container>
-            <Navbar.Brand href="#/" onClick={() => {}}>
-              Template
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="me-auto">
-                <NavDropdown title="Examples" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#/page-a">Page A</NavDropdown.Item>
-                </NavDropdown>
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
+  const [user, setUser] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [classes, setClasses] = useState<string | null>(null);
 
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="page-a" element={<PageA />} />
-        </Routes>
-      </HashRouter>
-    </div>
-  );
+  if (classes === null) {
+    return (
+      <div>
+        <input value={user} onChange={(ev) => setUser(ev.target.value)} />
+        <input
+          value={password}
+          onChange={(ev) => setPassword(ev.target.value)}
+        />
+        <button
+          onClick={async () => {
+            const response = await axios.post(`${BASE_URL}/login`, {
+              user,
+              password,
+            });
+
+            const { sessionId } = response.data;
+
+            const responseGet = await axios.get(
+              `${BASE_URL}/available-classes`,
+              {
+                headers: {
+                  authorization: sessionId,
+                },
+              }
+            );
+
+            setClasses(JSON.stringify(responseGet.data));
+          }}
+        >
+          SEND
+        </button>
+      </div>
+    );
+  }
+
+  return <div>{classes}</div>;
 }
 
-function Homepage() {
-  return <div>This is the home page!</div>;
-}
-
-function PageA() {
-  return <div>This is the Page A.</div>;
-}
 export default App;
