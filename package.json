@@ -1,7 +1,7 @@
 {
-  "name": "modern-web-app-template",
+  "name": "open-ufrgs",
   "version": "0.1.0",
-  "homepage": "https://[your-github-username].github.io/[your-repository-name]/",
+  "homepage": "https://gui-de-oliveira.github.io/open-ufrgs/",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
