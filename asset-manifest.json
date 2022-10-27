@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/open-ufrgs/static/css/main.e4889cbf.css",
-    "main.js": "/open-ufrgs/static/js/main.89be355a.js",
+    "main.js": "/open-ufrgs/static/js/main.5bc5c09f.js",
     "static/js/787.408cbe2e.chunk.js": "/open-ufrgs/static/js/787.408cbe2e.chunk.js",
     "index.html": "/open-ufrgs/index.html",
     "main.e4889cbf.css.map": "/open-ufrgs/static/css/main.e4889cbf.css.map",
-    "main.89be355a.js.map": "/open-ufrgs/static/js/main.89be355a.js.map",
+    "main.5bc5c09f.js.map": "/open-ufrgs/static/js/main.5bc5c09f.js.map",
     "787.408cbe2e.chunk.js.map": "/open-ufrgs/static/js/787.408cbe2e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e4889cbf.css",
-    "static/js/main.89be355a.js"
+    "static/js/main.5bc5c09f.js"
   ]
 }
