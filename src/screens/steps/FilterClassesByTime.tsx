@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Class } from "../../api/getAvailableClasses";
 import { groupBy } from "../../utils/groupBy";
+import { deduplicate } from "../../utils/deduplicate";
 import { GenericCheckboxScreen } from "./GenericCheckboxScreen";
 
 export function FilterClassesByTime({
@@ -58,7 +59,7 @@ export function FilterClassesByTime({
         const selectedClasses = selectedGroups.flatMap((group) =>
           group.elements.map((e) => e.turma.class)
         );
-        onCompleted(selectedClasses);
+        onCompleted(deduplicate(selectedClasses));
       }}
     />
   );

@@ -19,8 +19,9 @@ export function GenericCheckboxScreen<T>({
   return (
     <div className="container">
       <h3>{header}</h3>
-      {groups.map((placeGroup) => (
+      {groups.map((placeGroup, i) => (
         <Checkbox
+          key={i}
           label={label(placeGroup)}
           isSelected={selectedGroups.includes(placeGroup)}
           onSelect={() => setSelectedGroups([...selectedGroups, placeGroup])}

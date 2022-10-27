@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Class, getAvailableClasses, Turma } from "../api/getAvailableClasses";
+import { Class, getAvailableClasses } from "../api/getAvailableClasses";
 import { FilterClasseByName } from "./steps/FilterClasseByName";
 import { FilterClassesByTime } from "./steps/FilterClassesByTime";
+import { BlocksDisplay } from "./steps/BlocksDisplay";
 
 type State =
   | { tag: "LOADING" | "ERROR" }
@@ -61,6 +62,10 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
         }
       />
     );
+  }
+
+  if (state.tag === "FILTER_COMPLETE") {
+    return <BlocksDisplay classes={state.classes} />;
   }
 
   return <div></div>;
