@@ -20,34 +20,38 @@ export function BlocksDisplay({ classes }: { classes: Class[] }) {
   );
 
   return (
-    <table className="table-bordered table-responsive">
-      <thead>
-        <tr>
-          <th scope="col" />
-          {classesList.map((c, i) => (
-            <th key={i} scope="col">
-              {c.nome}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {blocks.map((block, i) => (
-          <tr key={i}>
-            <th scope="row">Bloco {i + 1}</th>
-            {classesList.map((classElement, index) => {
-              const turmaFromClass = block.find(
-                (turma) => turma.class === classElement
-              );
-              return (
-                <td key={index} className="text-center">
-                  {turmaFromClass?.label ?? "-"}
-                </td>
-              );
-            })}
+    <div className="container">
+      <h3>Blocos</h3>
+      <table className="table table-bordered table-responsive align-middle">
+        <thead>
+          <tr>
+            <th scope="col" />
+            {blocks.map((_c, i) => (
+              <th className="text-center" key={i} scope="col">
+                B{i <= 9 ? "0" : ""}
+                {i + 1}
+              </th>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {classesList.map((classElement, i) => (
+            <tr key={i}>
+              <th scope="row">{classElement.nome}</th>
+              {blocks.map((block, index) => {
+                const turmaFromClass = block.find(
+                  (turma) => turma.class === classElement
+                );
+                return (
+                  <td key={index} className="text-center">
+                    {turmaFromClass?.label ?? "-"}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
