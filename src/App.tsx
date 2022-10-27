@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { LoginScreen } from "./screens/LoginScreen";
+import { SemesterPlannerScreen } from "./screens/SemesterPlannerScreen";
 
+type State = { tag: "LOGIN" } | { tag: "LOGGED IN"; sessionId: string };
 function App() {
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [state, setState] = useState<State>({ tag: "LOGIN" });
 
-  if (sessionId === null) {
+  if (state.tag === "LOGIN") {
     return (
       <LoginScreen
         onLogin={async (sessionId) => {
-          setSessionId(sessionId);
+          setState({ tag: "LOGGED IN", sessionId });
         }}
       />
     );
   }
 
-  return <div>{sessionId}</div>;
+  return <SemesterPlannerScreen sessionId={state.sessionId} />;
 }
 
 export default App;
