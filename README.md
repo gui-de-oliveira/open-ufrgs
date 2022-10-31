@@ -6,4 +6,4 @@ Open UFRGS é uma interface open source para acessar o sistema da UFRGS. Seu obj
 
 Atualmente, a Open UFRGS possui apenas a ferramenta de planejamento de encomenda de matrícula, que ainda está em desenvolvimento.
 
-A Open UFRGS utiliza a [Open UFRGS API](https://github.com/gui-de-oliveira/open-ufrgs-api0), uma API para os recursos do sistema da UFRGS que também está em fase de testes.
+A Open UFRGS utiliza a [Open UFRGS API](https://github.com/gui-de-oliveira/open-ufrgs-api), uma API para os recursos do sistema da UFRGS que também está em fase de testes.
