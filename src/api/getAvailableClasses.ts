@@ -18,15 +18,17 @@ export type Class = {
   turmas: Turma[];
 };
 
+export type TimeAndPlace = {
+  weekDay: "Segunda" | "Terça" | "Quarta" | "Quinta" | "Sexta";
+  startTime: string;
+  endTime: string;
+  place: string | null;
+};
+
 export type Turma = {
   label: string;
   vagas: number;
-  places: {
-    weekDay: "Segunda" | "Terça" | "Quarta" | "Quinta" | "Sexta";
-    startTime: string;
-    endTime: string;
-    place: string | null;
-  }[];
+  places: TimeAndPlace[];
   professors: string[];
 };
 

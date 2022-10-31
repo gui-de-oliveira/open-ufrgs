@@ -1,8 +1,15 @@
 import { useMemo } from "react";
-import { Class } from "../../api/getAvailableClasses";
+import { Class, TimeAndPlace } from "../../api/getAvailableClasses";
 import { groupBy } from "../../utils/groupBy";
-import { deduplicate } from "../../utils/deduplicate";
 import { GenericCheckboxScreen } from "./GenericCheckboxScreen";
+
+const isSameTime = (placeA: TimeAndPlace, placeB: TimeAndPlace): boolean => {
+  return (
+    placeA.weekDay === placeB.weekDay &&
+    placeA.startTime === placeB.startTime &&
+    placeA.endTime === placeB.endTime
+  );
+};
 
 export function FilterClassesByTime({
   classes,
@@ -11,19 +18,25 @@ export function FilterClassesByTime({
   classes: Class[];
   onCompleted: (selectedClasses: Class[]) => void;
 }) {
-  const places = classes
-    .flatMap((c) => c.turmas.map((turma) => ({ class: c, ...turma })))
-    .flatMap((turma) => turma.places.map((place) => ({ ...place, turma })));
+  const places = useMemo(
+    () =>
+      classes
+        .flatMap((c) => c.turmas.map((turma) => ({ class: c, ...turma })))
+        .flatMap((turma) => turma.places.map((place) => ({ ...place, turma }))),
+    [classes]
+  );
 
   const groups = useMemo(
     () =>
       groupBy(
         places,
-        ({ weekDay, startTime, endTime }) => ({ weekDay, startTime, endTime }),
-        (placeA, placeB) =>
-          placeA.weekDay === placeB.weekDay &&
-          placeA.startTime === placeB.startTime &&
-          placeA.endTime === placeB.endTime
+        ({ weekDay, startTime, endTime, place }) => ({
+          weekDay,
+          startTime,
+          endTime,
+          place,
+        }),
+        isSameTime
       ).sort(({ id: idA }, { id: idB }) => {
         if (idA.weekDay !== idB.weekDay) {
           const weekDayValue: typeof idA["weekDay"][] = [
@@ -45,7 +58,7 @@ export function FilterClassesByTime({
 
         return idA.endTime.localeCompare(idB.endTime);
       }),
-    []
+    [places]
   );
 
   return (
@@ -56,10 +69,45 @@ export function FilterClassesByTime({
         `${placeGroup.id.weekDay} ${placeGroup.id.startTime} - ${placeGroup.id.endTime}`
       }
       onCompleted={(selectedGroups) => {
-        const selectedClasses = selectedGroups.flatMap((group) =>
-          group.elements.map((e) => e.turma.class)
+        const turmas = classes.flatMap((c) =>
+          c.turmas.map((t) => ({ ...t, class: c }))
         );
-        onCompleted(deduplicate(selectedClasses));
+
+        const turmasInsideTimeframe = turmas.filter((turma) => {
+          const timeOutsideSelectedTimeFrame = turma.places.find((time) => {
+            const isTimeSelected = !!selectedGroups.find((group) =>
+              isSameTime(group.id, time)
+            );
+            return !isTimeSelected;
+          });
+
+          const isTurmaInsideTimeFrame =
+            timeOutsideSelectedTimeFrame === undefined;
+
+          return isTurmaInsideTimeFrame;
+        });
+
+        const selectedClasses = turmasInsideTimeframe.reduce(
+          (selectedClasses, turmaInsideTimeframe) => {
+            const selectedClass = selectedClasses.find(
+              (c) => c.nome === turmaInsideTimeframe.class.nome
+            );
+
+            if (selectedClass === undefined) {
+              selectedClasses.push({
+                ...turmaInsideTimeframe.class,
+                turmas: [turmaInsideTimeframe],
+              });
+            } else {
+              selectedClass.turmas.push(turmaInsideTimeframe);
+            }
+
+            return selectedClasses;
+          },
+          [] as Class[]
+        );
+
+        onCompleted(selectedClasses);
       }}
     />
   );
