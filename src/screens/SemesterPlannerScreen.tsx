@@ -3,11 +3,16 @@ import { Class, getAvailableClasses } from "../api/getAvailableClasses";
 import { FilterClasseByName } from "./steps/FilterClasseByName";
 import { FilterClassesByTime } from "./steps/FilterClassesByTime";
 import { BlocksDisplay } from "./steps/BlocksDisplay";
+import { FilterClassesByTurma } from "./steps/FilterClassesByTurma";
 
 type State =
   | { tag: "LOADING" | "ERROR" }
   | {
-      tag: "FILTER_BY_NAME" | "FILTER_BY_WEEK_SCHEDULE" | "FILTER_COMPLETE";
+      tag:
+        | "FILTER_BY_NAME"
+        | "FILTER_BY_WEEK_SCHEDULE"
+        | "FILTER_BY_TURMAS"
+        | "FILTER_COMPLETE";
       classes: Class[];
     };
 
@@ -53,6 +58,20 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
   if (state.tag === "FILTER_BY_WEEK_SCHEDULE") {
     return (
       <FilterClassesByTime
+        classes={state.classes}
+        onCompleted={(selectedClasses) =>
+          setState({
+            tag: "FILTER_BY_TURMAS",
+            classes: selectedClasses,
+          })
+        }
+      />
+    );
+  }
+
+  if (state.tag === "FILTER_BY_TURMAS") {
+    return (
+      <FilterClassesByTurma
         classes={state.classes}
         onCompleted={(selectedClasses) =>
           setState({

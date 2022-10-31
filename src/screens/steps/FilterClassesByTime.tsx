@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Class, TimeAndPlace } from "../../api/getAvailableClasses";
 import { groupBy } from "../../utils/groupBy";
 import { GenericCheckboxScreen } from "./GenericCheckboxScreen";
+import { groupTurmasInClasses } from "../../utils/groupTurmasInClasses";
 
 const isSameTime = (placeA: TimeAndPlace, placeB: TimeAndPlace): boolean => {
   return (
@@ -87,25 +88,7 @@ export function FilterClassesByTime({
           return isTurmaInsideTimeFrame;
         });
 
-        const selectedClasses = turmasInsideTimeframe.reduce(
-          (selectedClasses, turmaInsideTimeframe) => {
-            const selectedClass = selectedClasses.find(
-              (c) => c.nome === turmaInsideTimeframe.class.nome
-            );
-
-            if (selectedClass === undefined) {
-              selectedClasses.push({
-                ...turmaInsideTimeframe.class,
-                turmas: [turmaInsideTimeframe],
-              });
-            } else {
-              selectedClass.turmas.push(turmaInsideTimeframe);
-            }
-
-            return selectedClasses;
-          },
-          [] as Class[]
-        );
+        const selectedClasses = groupTurmasInClasses(turmasInsideTimeframe);
 
         onCompleted(selectedClasses);
       }}
