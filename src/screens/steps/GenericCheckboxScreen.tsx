@@ -7,11 +7,13 @@ export function GenericCheckboxScreen<T>({
   groups,
   onCompleted,
   label,
+  onReturn,
 }: {
   header: string;
   groups: T[];
   label: (element: T) => string;
   onCompleted: (selectedGroups: T[]) => void;
+  onReturn?: () => void;
 }) {
   const [selectedGroups, setSelectedGroups] = useState<T[]>([]);
   const isAllSelected = selectedGroups.length === groups.length;
@@ -48,6 +50,7 @@ export function GenericCheckboxScreen<T>({
         onClick={() => onCompleted(selectedGroups)}
         text="Confirmar"
       />
+      {onReturn && <PrimaryButton onClick={onReturn} text="Voltar" />}
     </div>
   );
 }

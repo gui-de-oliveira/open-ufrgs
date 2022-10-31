@@ -2,11 +2,18 @@ import { useMemo } from "react";
 import { Class, Turma } from "../../api/getAvailableClasses";
 import { deduplicate } from "../../utils/deduplicate";
 import { getBlocks } from "../../utils/getBlocks";
+import { PrimaryButton } from "../../utils/PrimaryButton";
 
 export type TurmaExtended = Turma & { class: Class };
 export type Block = TurmaExtended[];
 
-export function BlocksDisplay({ classes }: { classes: Class[] }) {
+export function BlocksDisplay({
+  classes,
+  onReturn,
+}: {
+  classes: Class[];
+  onReturn: () => void;
+}) {
   const blocks = useMemo(() => getBlocks(classes), [classes]);
 
   if (blocks.length === 0) {
@@ -52,6 +59,7 @@ export function BlocksDisplay({ classes }: { classes: Class[] }) {
           ))}
         </tbody>
       </table>
+      <PrimaryButton onClick={onReturn} text="Voltar" />
     </div>
   );
 }

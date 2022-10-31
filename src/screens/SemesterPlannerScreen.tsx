@@ -7,13 +7,11 @@ import { FilterClassesByTurma } from "./steps/FilterClassesByTurma";
 
 type State =
   | { tag: "LOADING" | "ERROR" }
+  | { tag: "FILTER_BY_NAME"; classes: Class[] }
   | {
-      tag:
-        | "FILTER_BY_NAME"
-        | "FILTER_BY_WEEK_SCHEDULE"
-        | "FILTER_BY_TURMAS"
-        | "FILTER_COMPLETE";
+      tag: "FILTER_BY_WEEK_SCHEDULE" | "FILTER_BY_TURMAS" | "FILTER_COMPLETE";
       classes: Class[];
+      previousState: State;
     };
 
 export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
@@ -49,6 +47,7 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
           setState({
             tag: "FILTER_BY_WEEK_SCHEDULE",
             classes: selectedClasses,
+            previousState: state,
           })
         }
       />
@@ -63,8 +62,10 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
           setState({
             tag: "FILTER_BY_TURMAS",
             classes: selectedClasses,
+            previousState: state,
           })
         }
+        onReturn={() => setState(state.previousState)}
       />
     );
   }
@@ -77,14 +78,21 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
           setState({
             tag: "FILTER_COMPLETE",
             classes: selectedClasses,
+            previousState: state,
           })
         }
+        onReturn={() => setState(state.previousState)}
       />
     );
   }
 
   if (state.tag === "FILTER_COMPLETE") {
-    return <BlocksDisplay classes={state.classes} />;
+    return (
+      <BlocksDisplay
+        classes={state.classes}
+        onReturn={() => setState(state.previousState)}
+      />
+    );
   }
 
   return <div></div>;

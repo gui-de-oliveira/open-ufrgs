@@ -9,9 +9,11 @@ import { groupTurmasInClasses } from "../../utils/groupTurmasInClasses";
 export function FilterClassesByTurma({
   classes,
   onCompleted,
+  onReturn,
 }: {
   classes: Class[];
   onCompleted: (selectedClasses: Class[]) => void;
+  onReturn: () => void;
 }) {
   const turmas = useMemo(
     () =>
@@ -60,6 +62,7 @@ export function FilterClassesByTurma({
         const selectedClasses = groupTurmasInClasses(selectedTurmas);
         onCompleted(selectedClasses);
       }}
+      onReturn={onReturn}
     />
   );
 }

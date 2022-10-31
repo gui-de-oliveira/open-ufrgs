@@ -15,9 +15,11 @@ const isSameTime = (placeA: TimeAndPlace, placeB: TimeAndPlace): boolean => {
 export function FilterClassesByTime({
   classes,
   onCompleted,
+  onReturn,
 }: {
   classes: Class[];
   onCompleted: (selectedClasses: Class[]) => void;
+  onReturn: () => void;
 }) {
   const places = useMemo(
     () =>
@@ -69,6 +71,7 @@ export function FilterClassesByTime({
       label={(placeGroup) =>
         `${placeGroup.id.weekDay} ${placeGroup.id.startTime} - ${placeGroup.id.endTime}`
       }
+      onReturn={onReturn}
       onCompleted={(selectedGroups) => {
         const turmas = classes.flatMap((c) =>
           c.turmas.map((t) => ({ ...t, class: c }))
