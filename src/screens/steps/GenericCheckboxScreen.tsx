@@ -22,7 +22,13 @@ export function GenericCheckboxScreen<T>({
   selectedIndexes: number[];
   updateSelectedIndexes: (updated: number[]) => void;
 }) {
-  const isAllSelected = selectedIndexes.length === groups.length;
+  const isGroupDisabled = (group: T) => {
+    if (isDisabled === undefined) return false;
+    return isDisabled(group);
+  };
+
+  const validGroups = groups.filter((group) => !isGroupDisabled(group));
+  const isValidGroupsSelected = selectedIndexes.length === validGroups.length;
 
   return (
     <div className="container">
@@ -30,33 +36,30 @@ export function GenericCheckboxScreen<T>({
       <Checkbox
         label={
           <Badge
-            text={!isAllSelected ? "Marcar todos" : "Desmarcar todos"}
+            text={!isValidGroupsSelected ? "Marcar todos" : "Desmarcar todos"}
             badgeStyle="primary"
           />
         }
-        isSelected={isAllSelected}
-        onSelect={() => updateSelectedIndexes(groups.map((_, index) => index))}
+        isSelected={isValidGroupsSelected}
+        onSelect={() =>
+          updateSelectedIndexes(validGroups.map((_, index) => index))
+        }
         onDeselect={() => updateSelectedIndexes([])}
       />
-      {groups.map((placeGroup, index) => {
-        const disabled =
-          isDisabled === undefined ? false : isDisabled(placeGroup);
-
-        return (
-          <Checkbox
-            key={index}
-            label={label(placeGroup, disabled)}
-            isDisabled={disabled}
-            isSelected={selectedIndexes.includes(index)}
-            onSelect={() => updateSelectedIndexes([...selectedIndexes, index])}
-            onDeselect={() =>
-              updateSelectedIndexes(
-                selectedIndexes.filter((selectedId) => selectedId !== index)
-              )
-            }
-          />
-        );
-      })}
+      {groups.map((placeGroup, index) => (
+        <Checkbox
+          key={index}
+          label={label(placeGroup, isGroupDisabled(placeGroup))}
+          isDisabled={isGroupDisabled(placeGroup)}
+          isSelected={selectedIndexes.includes(index)}
+          onSelect={() => updateSelectedIndexes([...selectedIndexes, index])}
+          onDeselect={() =>
+            updateSelectedIndexes(
+              selectedIndexes.filter((selectedId) => selectedId !== index)
+            )
+          }
+        />
+      ))}
       <br />
       <PrimaryButton
         onClick={() => {
