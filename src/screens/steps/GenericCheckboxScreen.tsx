@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
-import { Checkbox } from "../../utils/Checkbox";
-import { PrimaryButton } from "../../utils/PrimaryButton";
+import { Checkbox } from "../../components/Checkbox";
+import { PrimaryButton } from "../../components/PrimaryButton";
 
 export function GenericCheckboxScreen<T>({
   header,

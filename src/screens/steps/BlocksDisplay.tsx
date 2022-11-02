@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Class, Turma } from "../../api/getAvailableClasses";
 import { deduplicate } from "../../utils/deduplicate";
 import { getBlocks } from "../../utils/getBlocks";
-import { PrimaryButton } from "../../utils/PrimaryButton";
+import { PrimaryButton } from "../../components/PrimaryButton";
 
 export type TurmaExtended = Turma & { class: Class };
 export type Block = TurmaExtended[];
