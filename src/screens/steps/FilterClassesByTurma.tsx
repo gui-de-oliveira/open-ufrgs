@@ -10,7 +10,11 @@ export function FilterClassesByTurma({
   classes,
   onCompleted,
   onReturn,
+  selectedIndexes,
+  updateSelectedIndexes,
 }: {
+  selectedIndexes: number[];
+  updateSelectedIndexes: (updated: number[]) => void;
   classes: Class[];
   onCompleted: (selectedClasses: Class[]) => void;
   onReturn: () => void;
@@ -44,6 +48,8 @@ export function FilterClassesByTurma({
   return (
     <GenericCheckboxScreen
       groups={groups}
+      selectedIndexes={selectedIndexes}
+      updateSelectedIndexes={updateSelectedIndexes}
       header={"Selecione que turmas deseja fazer esse semestre:"}
       label={(turma) =>
         `${turma.id.class.nome} - ${

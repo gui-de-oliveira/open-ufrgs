@@ -8,7 +8,11 @@ import { GenericCheckboxScreen } from "./GenericCheckboxScreen";
 export function FilterClasseByName({
   onCompleted,
   classes,
+  selectedIndexes,
+  updateSelectedIndexes,
 }: {
+  selectedIndexes: number[];
+  updateSelectedIndexes: (updated: number[]) => void;
   classes: Class[];
   onCompleted: (selectedClasses: Class[]) => void;
 }) {
@@ -28,9 +32,14 @@ export function FilterClasseByName({
 
     return compare(classA.nome, classB.nome);
   }
+
   const groups = useMemo(
     () =>
-      groupBy(classes, (c) => c).sort((a, b) => orderByRelevancy(a.id, b.id)),
+      groupBy(
+        classes,
+        (c) => c,
+        (a, b) => a.nome === b.nome
+      ).sort((a, b) => orderByRelevancy(a.id, b.id)),
     [classes]
   );
 
@@ -53,6 +62,8 @@ export function FilterClasseByName({
         );
         onCompleted(selectedClasses);
       }}
+      selectedIndexes={selectedIndexes}
+      updateSelectedIndexes={updateSelectedIndexes}
     />
   );
 }

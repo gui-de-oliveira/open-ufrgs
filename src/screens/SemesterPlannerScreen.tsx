@@ -7,11 +7,16 @@ import { FilterClassesByTurma } from "./steps/FilterClassesByTurma";
 
 type State =
   | { tag: "LOADING" | "ERROR" }
-  | { tag: "FILTER_BY_NAME"; classes: Class[] }
+  | {
+      tag: "FILTER_BY_NAME";
+      classes: Class[];
+      selectedIndexes: number[];
+    }
   | {
       tag: "FILTER_BY_WEEK_SCHEDULE" | "FILTER_BY_TURMAS" | "FILTER_COMPLETE";
       classes: Class[];
-      previousState: State;
+      selectedIndexes: number[];
+      goBack: () => void;
     };
 
 export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
@@ -27,6 +32,7 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
       setState({
         tag: "FILTER_BY_NAME",
         classes: result.classes,
+        selectedIndexes: [],
       });
     });
   }, [sessionId]);
@@ -43,11 +49,18 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
     return (
       <FilterClasseByName
         classes={state.classes}
+        selectedIndexes={state.selectedIndexes}
+        updateSelectedIndexes={(updated) =>
+          setState((state) => ({ ...state, selectedIndexes: updated }))
+        }
         onCompleted={(selectedClasses) =>
           setState({
             tag: "FILTER_BY_WEEK_SCHEDULE",
             classes: selectedClasses,
-            previousState: state,
+            selectedIndexes: [],
+            goBack: () => {
+              setState({ ...state });
+            },
           })
         }
       />
@@ -58,14 +71,19 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
     return (
       <FilterClassesByTime
         classes={state.classes}
+        selectedIndexes={state.selectedIndexes}
+        updateSelectedIndexes={(updated) =>
+          setState((state) => ({ ...state, selectedIndexes: updated }))
+        }
         onCompleted={(selectedClasses) =>
           setState({
             tag: "FILTER_BY_TURMAS",
             classes: selectedClasses,
-            previousState: state,
+            goBack: () => setState(state),
+            selectedIndexes: [],
           })
         }
-        onReturn={() => setState(state.previousState)}
+        onReturn={state.goBack}
       />
     );
   }
@@ -74,25 +92,25 @@ export function SemesterPlannerScreen({ sessionId }: { sessionId: string }) {
     return (
       <FilterClassesByTurma
         classes={state.classes}
+        selectedIndexes={state.selectedIndexes}
+        updateSelectedIndexes={(updated) =>
+          setState((state) => ({ ...state, selectedIndexes: updated }))
+        }
         onCompleted={(selectedClasses) =>
           setState({
             tag: "FILTER_COMPLETE",
             classes: selectedClasses,
-            previousState: state,
+            goBack: () => setState(state),
+            selectedIndexes: [],
           })
         }
-        onReturn={() => setState(state.previousState)}
+        onReturn={state.goBack}
       />
     );
   }
 
   if (state.tag === "FILTER_COMPLETE") {
-    return (
-      <BlocksDisplay
-        classes={state.classes}
-        onReturn={() => setState(state.previousState)}
-      />
-    );
+    return <BlocksDisplay classes={state.classes} onReturn={state.goBack} />;
   }
 
   return <div></div>;

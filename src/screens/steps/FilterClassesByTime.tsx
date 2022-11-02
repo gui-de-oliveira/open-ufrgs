@@ -16,7 +16,11 @@ export function FilterClassesByTime({
   classes,
   onCompleted,
   onReturn,
+  selectedIndexes,
+  updateSelectedIndexes,
 }: {
+  selectedIndexes: number[];
+  updateSelectedIndexes: (updated: number[]) => void;
   classes: Class[];
   onCompleted: (selectedClasses: Class[]) => void;
   onReturn: () => void;
@@ -67,6 +71,8 @@ export function FilterClassesByTime({
   return (
     <GenericCheckboxScreen
       groups={groups}
+      selectedIndexes={selectedIndexes}
+      updateSelectedIndexes={updateSelectedIndexes}
       header={"Selecione que horários deseja fazer esse semestre:"}
       label={(placeGroup) =>
         `${placeGroup.id.weekDay} ${placeGroup.id.startTime} - ${placeGroup.id.endTime}`
