@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Checkbox } from "../../utils/Checkbox";
 import { PrimaryButton } from "../../utils/PrimaryButton";
 
@@ -11,7 +11,7 @@ export function GenericCheckboxScreen<T>({
 }: {
   header: string;
   groups: T[];
-  label: (element: T) => string;
+  label: (element: T) => ReactNode;
   onCompleted: (selectedGroups: T[]) => void;
   onReturn?: () => void;
 }) {

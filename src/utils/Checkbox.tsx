@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useMemo, useRef } from "react";
 
 export function Checkbox({
   label,
@@ -6,7 +6,7 @@ export function Checkbox({
   onSelect,
   onDeselect,
 }: {
-  label: string;
+  label: ReactNode;
   isSelected: boolean;
   onSelect: () => void;
   onDeselect: () => void;
@@ -19,13 +19,18 @@ export function Checkbox({
     }
   }, [isSelected]);
 
+  const elementId = useMemo(() => {
+    const randomId = Math.random().toString();
+    return randomId;
+  }, []);
+
   return (
     <div className="form-check">
       <input
         ref={ref}
         className="form-check-input"
         type="checkbox"
-        id={label}
+        id={elementId}
         defaultChecked={isSelected}
         onChange={(ev) => {
           const isChecked = ev.target.checked;
@@ -33,7 +38,7 @@ export function Checkbox({
           callback();
         }}
       />
-      <label className="form-check-label" htmlFor={label}>
+      <label className="form-check-label" htmlFor={elementId}>
         {label}
       </label>
     </div>
