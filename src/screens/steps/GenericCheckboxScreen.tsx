@@ -10,10 +10,12 @@ export function GenericCheckboxScreen<T>({
   onReturn,
   selectedIndexes,
   updateSelectedIndexes,
+  isDisabled,
 }: {
   header: string;
   groups: T[];
-  label: (element: T) => ReactNode;
+  label: (element: T, isDisabled: boolean) => ReactNode;
+  isDisabled?: (element: T) => boolean;
   onCompleted: (selectedGroups: T[]) => void;
   onReturn?: () => void;
   selectedIndexes: number[];
@@ -24,21 +26,27 @@ export function GenericCheckboxScreen<T>({
   return (
     <div className="container">
       <h3>{header}</h3>
-      {groups.map((placeGroup, index) => (
-        <Checkbox
-          key={index}
-          label={label(placeGroup)}
-          isSelected={(() => {
-            return selectedIndexes.includes(index);
-          })()}
-          onSelect={() => updateSelectedIndexes([...selectedIndexes, index])}
-          onDeselect={() =>
-            updateSelectedIndexes(
-              selectedIndexes.filter((selectedId) => selectedId !== index)
-            )
-          }
-        />
-      ))}
+      {groups.map((placeGroup, index) => {
+        const disabled =
+          isDisabled === undefined ? false : isDisabled(placeGroup);
+
+        return (
+          <Checkbox
+            key={index}
+            label={label(placeGroup, disabled)}
+            isDisabled={disabled}
+            isSelected={(() => {
+              return selectedIndexes.includes(index);
+            })()}
+            onSelect={() => updateSelectedIndexes([...selectedIndexes, index])}
+            onDeselect={() =>
+              updateSelectedIndexes(
+                selectedIndexes.filter((selectedId) => selectedId !== index)
+              )
+            }
+          />
+        );
+      })}
       <br />
       {!isAllSelected ? (
         <PrimaryButton

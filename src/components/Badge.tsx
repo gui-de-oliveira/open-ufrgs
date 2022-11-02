@@ -1,4 +1,4 @@
-type BadgeStyle = "primary" | "secondary" | "success";
+type BadgeStyle = "primary" | "secondary" | "success" | "danger";
 
 export function Badge(props: { text: string; badgeStyle?: BadgeStyle }) {
   const defaultProps = { badgeStyle: "primary" } as const;

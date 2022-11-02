@@ -5,8 +5,10 @@ export function Checkbox({
   isSelected,
   onSelect,
   onDeselect,
+  isDisabled,
 }: {
   label: ReactNode;
+  isDisabled?: boolean;
   isSelected: boolean;
   onSelect: () => void;
   onDeselect: () => void;
@@ -23,6 +25,7 @@ export function Checkbox({
         type="checkbox"
         id={elementId}
         checked={isSelected}
+        disabled={isDisabled === undefined ? false : isDisabled}
         onChange={(ev) => {
           const isChecked = ev.target.checked;
           const callback = isChecked ? onSelect : onDeselect;

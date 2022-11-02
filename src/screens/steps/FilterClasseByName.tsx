@@ -17,6 +17,10 @@ export function FilterClasseByName({
   onCompleted: (selectedClasses: Class[]) => void;
 }) {
   function orderByRelevancy(classA: Class, classB: Class): number {
+    if (classA.isAvailable !== classB.isAvailable) {
+      return Number(classB.isAvailable) - Number(classA.isAvailable);
+    }
+
     if (classA.etapa !== classB.etapa) {
       return Number(classA.etapa) - Number(classB.etapa);
     }
@@ -47,15 +51,20 @@ export function FilterClasseByName({
     <GenericCheckboxScreen
       groups={groups}
       header={"Selecione que cadeiras deseja fazer esse semestre:"}
-      label={(placeGroup) => {
+      label={(placeGroup, isDisabled) => {
         const { nome, etapa, carater } = placeGroup.id;
         return (
           <>
             <Badge text={`Etapa ${etapa}`} />{" "}
-            <Badge text={carater} badgeStyle={"secondary"} /> {nome}
+            <Badge text={carater} badgeStyle={"secondary"} />{" "}
+            {isDisabled && (
+              <Badge text={`Sem turmas disponíveis`} badgeStyle="danger" />
+            )}{" "}
+            {nome}
           </>
         );
       }}
+      isDisabled={(c) => !c.id.isAvailable}
       onCompleted={(selectedGroups) => {
         const selectedClasses = selectedGroups.flatMap(
           (group) => group.elements
