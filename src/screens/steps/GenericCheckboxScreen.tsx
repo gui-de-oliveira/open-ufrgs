@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Badge } from "../../components/Badge";
 import { Checkbox } from "../../components/Checkbox";
 import { PrimaryButton } from "../../components/PrimaryButton";
 
@@ -26,6 +27,17 @@ export function GenericCheckboxScreen<T>({
   return (
     <div className="container">
       <h3>{header}</h3>
+      <Checkbox
+        label={
+          <Badge
+            text={!isAllSelected ? "Marcar todos" : "Desmarcar todos"}
+            badgeStyle="primary"
+          />
+        }
+        isSelected={isAllSelected}
+        onSelect={() => updateSelectedIndexes(groups.map((_, index) => index))}
+        onDeselect={() => updateSelectedIndexes([])}
+      />
       {groups.map((placeGroup, index) => {
         const disabled =
           isDisabled === undefined ? false : isDisabled(placeGroup);
@@ -35,9 +47,7 @@ export function GenericCheckboxScreen<T>({
             key={index}
             label={label(placeGroup, disabled)}
             isDisabled={disabled}
-            isSelected={(() => {
-              return selectedIndexes.includes(index);
-            })()}
+            isSelected={selectedIndexes.includes(index)}
             onSelect={() => updateSelectedIndexes([...selectedIndexes, index])}
             onDeselect={() =>
               updateSelectedIndexes(
@@ -48,17 +58,6 @@ export function GenericCheckboxScreen<T>({
         );
       })}
       <br />
-      {!isAllSelected ? (
-        <PrimaryButton
-          onClick={() => updateSelectedIndexes(groups.map((_, index) => index))}
-          text="Marcar todos"
-        />
-      ) : (
-        <PrimaryButton
-          onClick={() => updateSelectedIndexes([])}
-          text="Desmarcar todos"
-        />
-      )}{" "}
       <PrimaryButton
         onClick={() => {
           const selectedValues = selectedIndexes.map(
