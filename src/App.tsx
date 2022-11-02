@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { OpenUFRGSNavBar } from "./components/OpenUFRGSNavBar";
 import { LoginScreen } from "./screens/LoginScreen";
 import { SemesterPlannerScreen } from "./screens/SemesterPlannerScreen";
 
@@ -16,7 +17,12 @@ function App() {
     );
   }
 
-  return <SemesterPlannerScreen sessionId={state.sessionId} />;
+  return (
+    <>
+      <OpenUFRGSNavBar />
+      <SemesterPlannerScreen sessionId={state.sessionId} />;
+    </>
+  );
 }
 
 export default App;
