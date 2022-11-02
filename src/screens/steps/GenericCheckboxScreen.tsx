@@ -62,15 +62,21 @@ export function GenericCheckboxScreen<T>({
       ))}
       <br />
       <PrimaryButton
+        onClick={() => onReturn?.()}
+        isDisabled={onReturn === undefined}
+        text="Voltar"
+      />{" "}
+      <PrimaryButton
         onClick={() => {
           const selectedValues = selectedIndexes.map(
             (selectedId) => groups[selectedId]
           );
+
           onCompleted(selectedValues);
         }}
-        text="Confirmar"
+        isDisabled={selectedIndexes.length === 0}
+        text="Avançar"
       />
-      {onReturn && <PrimaryButton onClick={onReturn} text="Voltar" />}
     </div>
   );
 }
