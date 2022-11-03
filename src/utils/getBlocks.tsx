@@ -10,7 +10,7 @@ export function getBlocks(classes: Class[]) {
 
   const travelledBlocksRef = { travelledBlocks: [] as Block[] };
   const blocks = getValidBlocks(travelledBlocksRef, [], turmas)
-    .sort((a, b) => a.length - b.length)
+    .sort((a, b) => b.length - a.length)
     .slice(0, 20);
 
   return blocks;
