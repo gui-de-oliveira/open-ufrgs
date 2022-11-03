@@ -5,6 +5,8 @@ import { TurmaExtended } from "./BlocksDisplay";
 import { compare } from "../../utils/compare";
 import { GenericCheckboxScreen } from "./GenericCheckboxScreen";
 import { groupTurmasInClasses } from "../../utils/groupTurmasInClasses";
+import { Badge } from "../../components/Badge";
+import React from "react";
 
 export function FilterClassesByTurma({
   classes,
@@ -51,18 +53,37 @@ export function FilterClassesByTurma({
       selectedIndexes={selectedIndexes}
       updateSelectedIndexes={updateSelectedIndexes}
       header={"Selecione que turmas deseja fazer esse semestre:"}
-      label={(turma) =>
-        `${turma.id.class.nome} - ${
-          turma.id.label
-        } - Professores: [${turma.id.professors.join()}] - Horários: [${turma.id.places
-          .map(
-            (place) =>
-              `${place.weekDay} das ${place.startTime} às ${place.endTime}${
-                place.place === null ? "" : `Em ${place.place}`
-              }`
-          )
-          .join()}] - Número de vagas: ${turma.id.vagas}`
-      }
+      label={(turma) => (
+        <>
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">{turma.id.class.nome}</h5>
+              <h6 className="card-subtitle mb-2 text-muted">
+                Turma {turma.id.label} - {turma.id.vagas} vagas
+              </h6>
+
+              {turma.id.professors.map((professor, i) => (
+                <React.Fragment key={i}>
+                  <Badge text={professor} />{" "}
+                </React.Fragment>
+              ))}
+              <br />
+
+              {turma.id.places.map((place, i) => (
+                <React.Fragment key={i}>
+                  <Badge text={place.weekDay} badgeStyle="info" />{" "}
+                  <Badge text={`${place.startTime} às ${place.endTime}`} />{" "}
+                  {place.place !== null && (
+                    <Badge text={`Em ${place.place}`} badgeStyle="secondary" />
+                  )}
+                  <br />
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+          <br />
+        </>
+      )}
       onCompleted={(selectedGroups) => {
         const selectedTurmas = selectedGroups.map((g) => g.id);
         const selectedClasses = groupTurmasInClasses(selectedTurmas);

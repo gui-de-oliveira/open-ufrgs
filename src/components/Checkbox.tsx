@@ -32,7 +32,11 @@ export function Checkbox({
           callback();
         }}
       />
-      <label className="form-check-label" htmlFor={elementId}>
+      <label
+        className="form-check-label"
+        htmlFor={elementId}
+        style={{ width: "100%", cursor: "pointer" }}
+      >
         {label}
       </label>
     </div>
