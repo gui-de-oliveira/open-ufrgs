@@ -3,6 +3,7 @@ import { Class, TimeAndPlace } from "../../api/getAvailableClasses";
 import { groupBy } from "../../utils/groupBy";
 import { GenericCheckboxScreen } from "./GenericCheckboxScreen";
 import { groupTurmasInClasses } from "../../utils/groupTurmasInClasses";
+import { Badge } from "../../components/Badge";
 
 const isSameTime = (placeA: TimeAndPlace, placeB: TimeAndPlace): boolean => {
   return (
@@ -74,9 +75,14 @@ export function FilterClassesByTime({
       selectedIndexes={selectedIndexes}
       updateSelectedIndexes={updateSelectedIndexes}
       header={"Selecione que horários deseja fazer esse semestre:"}
-      label={(placeGroup) =>
-        `${placeGroup.id.weekDay} ${placeGroup.id.startTime} - ${placeGroup.id.endTime}`
-      }
+      label={(placeGroup) => (
+        <>
+          <Badge text={placeGroup.id.weekDay} badgeStyle="info" />{" "}
+          <Badge
+            text={`${placeGroup.id.startTime} às ${placeGroup.id.endTime}`}
+          />
+        </>
+      )}
       onReturn={onReturn}
       onCompleted={(selectedGroups) => {
         const turmas = classes.flatMap((c) =>
